@@ -1,4 +1,5 @@
 import { APP_NAME, NAV_LINKS } from "../config.ts";
+import { Link } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle.tsx";
 import "./Navbar.css";
 
@@ -15,7 +16,7 @@ export function Navbar() {
             <ul>
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href}>{link.label}</a>
+                  <Link to={link.href}>{link.label}</Link>
                 </li>
               ))}
             </ul>

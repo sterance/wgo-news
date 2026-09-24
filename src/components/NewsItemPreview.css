@@ -1,0 +1,28 @@
+.MuiTypography-h4 {
+  margin-top: 1rem !important;
+}
+
+.news-preview-body {
+  position: relative;
+}
+
+.truncated-body {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.read-more-link {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(to right, transparent 0%, var(--bg, #fff) 25%);
+  padding-left: 1.5rem;
+}
+
+a {
+  color: var(--text) !important;
+  text-decoration-color: var(--text) !important;
+}
