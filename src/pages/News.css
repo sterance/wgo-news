@@ -1,3 +1,18 @@
 .category-chips .MuiChip-root {
   color: var(--text);
 }
+
+.category-chips .MuiChip-root.category-chip--selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.category-chips .MuiChip-root.category-chip--selected:hover {
+  color: var(--text);
+}
+
+.MuiTypography-h5 {
+  margin-top: 2rem !important;
+  border-bottom: 1px solid var(--border);
+}

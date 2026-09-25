@@ -20,6 +20,14 @@ src/
   index.css     Tokens + base styles
 ```
 
+## Backend
+
+The news content comes from a Django API in [`backend/`](backend/README.md). Start it first
+(`python manage.py runserver`), then run `npm run dev`. The front end expects it at
+`http://localhost:8000`; override with `VITE_BACKEND_URL` (see `.env.example`). For the
+Cloudflare deploy, set a repository variable `VITE_BACKEND_URL` to the backend's public URL,
+and add the front end's origin to the backend's `DJANGO_CORS_ORIGINS`.
+
 ## Starting a new project
 
 Make this repo a **template repository** once (GitHub → Settings → tick *Template repository*).

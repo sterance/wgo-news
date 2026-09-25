@@ -30,6 +30,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run build
+        env:
+          # Public URL of the Django backend (repository variable)
+          VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
 
       # Only deploy from main. Pull requests stop after lint + build.
       - name: Deploy to Cloudflare Pages
