@@ -16,3 +16,17 @@
   margin-top: 2rem !important;
   border-bottom: 1px solid var(--border);
 }
+
+.news-chips {
+  margin-top: 1rem !important;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.news-category-stack {
+  gap: 1rem;
+}
+
+.news-no-articles {
+  margin-top: 0.25rem;
+}

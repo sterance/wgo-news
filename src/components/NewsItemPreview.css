@@ -35,3 +35,7 @@ a {
   color: var(--text) !important;
   text-decoration-color: var(--text) !important;
 }
+
+.news-preview-header {
+  align-items: baseline;
+}

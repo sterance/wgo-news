@@ -6,6 +6,7 @@ import { useApi } from "../api/useApi.ts";
 import QueryStatus from "../components/QueryStatus.tsx";
 import { capitaliseWords } from "../utils/formatters.ts";
 import dayjs from "dayjs";
+import "./Article.css";
 
 export default function Article() {
   const { id } = useParams();
@@ -14,8 +15,8 @@ export default function Article() {
   const { data: article, loading, error } = useApi<NewsItem>(validId ? endpoints.article(id) : null);
 
   return (
-    <Stack className="base-stack" spacing={1.5} sx={{ pt: 2 }}>
-      <Link component={RouterLink} to="/news" underline="hover" sx={{ alignSelf: "flex-start" }}>
+    <Stack className="base-stack article-page" spacing={1.5}>
+      <Link component={RouterLink} to="/news" underline="hover" className="article-back-link">
         ← Back to news
       </Link>
 
@@ -24,10 +25,10 @@ export default function Article() {
 
       {article && (
         <>
-          <Typography variant="h3" component="h1" sx={{ fontWeight: 700 }}>
+          <Typography variant="h3" component="h1" className="article-title">
             {article.title}
           </Typography>
-          <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+          <Stack direction="row" spacing={1} className="article-meta">
             <Typography>Category:</Typography>
             <Chip component={RouterLink} to={`/news?category=${article.category.id}`} label={capitaliseWords(article.category.name)} variant="outlined" size="small" clickable />
           </Stack>
@@ -35,7 +36,9 @@ export default function Article() {
           <Typography>
             Published: {dayjs(article.date_and_time).format("DD MMMM YYYY")}, {dayjs(article.date_and_time).format("hh:mm a")}
           </Typography>
-          <Typography sx={{ whiteSpace: "pre-line", pt: 2 }}>{article.content}</Typography>
+          <Typography className="article-content">
+            {article.content}
+          </Typography>
         </>
       )}
     </Stack>

@@ -53,7 +53,7 @@ export default function News() {
         Categories
       </Typography>
 
-      <Stack direction="row" useFlexGap spacing={1.5} className="category-chips" sx={{ marginTop: "1rem !important", flexWrap: "wrap", justifyContent: "center" }}>
+      <Stack direction="row" useFlexGap spacing={1.5} className="category-chips news-chips">
         <CategoryChip label="All" selected={showAll} onClick={() => selectCategory()} />
         {categories.data?.map((category) => (
           <CategoryChip key={category.id} label={capitaliseWords(category.name)} selected={selectedIds.includes(category.id)} onClick={() => selectCategory(category.id)} />
@@ -63,14 +63,14 @@ export default function News() {
       <QueryStatus loading={categories.loading || news.loading} error={categories.error ?? news.error} />
 
       {groups.map(({ category, items }) => (
-        <Stack key={category.id} sx={{ gap: "1rem" }}>
+        <Stack key={category.id} className="news-category-stack">
           <Typography variant="h5" component="h3">
             {capitaliseWords(category?.name)}
           </Typography>
           {items.map((item) => (
             <NewsItemPreview key={item.id} item={item} />
           ))}
-          {items.length === 0 && <Typography sx={{ mt: 1 }}>No articles in this category yet.</Typography>}
+          {items.length === 0 && <Typography className="news-no-articles">No articles in this category yet.</Typography>}
         </Stack>
       ))}
     </Stack>

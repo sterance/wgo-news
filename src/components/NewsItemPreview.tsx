@@ -12,7 +12,7 @@ export default function NewsItemPreview({ item }: Props) {
   const to = `/news/${item.id}`;
   return (
     <Stack className="news-preview">
-      <Stack direction="row" spacing={2} sx={{ alignItems: "baseline" }}>
+      <Stack direction="row" spacing={2} className="news-preview-header">
         <Typography variant="h4">
           <Link component={RouterLink} to={to}>
             {item.title}

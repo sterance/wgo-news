@@ -1,0 +1,21 @@
+.admin-actions {
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.admin-item {
+  margin-top: 0.5rem;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.admin-category {
+  margin-left: 0.25rem;
+  color: var(--text-muted);
+}
+
+.admin-empty {
+  margin-top: 0.5rem;
+}

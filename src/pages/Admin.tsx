@@ -5,6 +5,7 @@ import type { NewsItem } from "../api/types.ts";
 import { useApi } from "../api/useApi.ts";
 import QueryStatus from "../components/QueryStatus.tsx";
 import { capitaliseWords } from "../utils/formatters.ts";
+import "../pages/Admin.css";
 
 const newsAdmin = (path: string) => djangoAdminUrl(`news/news/${path}`);
 
@@ -17,7 +18,7 @@ export default function Admin() {
         Admin
       </Typography>
 
-      <Stack direction="row" useFlexGap spacing={1.5} sx={{ mt: 2, flexWrap: "wrap", justifyContent: "center" }}>
+      <Stack direction="row" useFlexGap spacing={1.5} className="admin-actions">
         <Button variant="contained" href={newsAdmin("add/")} target="_blank" rel="noopener">
           Create News
         </Button>
@@ -32,10 +33,10 @@ export default function Admin() {
       <QueryStatus loading={loading} error={error} />
 
       {data?.map((item) => (
-        <Stack key={item.id} direction="row" useFlexGap spacing={2} sx={{ mt: 2, alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap" }}>
+        <Stack key={item.id} direction="row" useFlexGap spacing={2} className="admin-item">
           <Typography variant="h6" component="h3">
             {item.title}
-            <Typography component="span" variant="body2" sx={{ ml: 1, color: "var(--text-muted)" }}>
+            <Typography component="span" variant="body2" className="admin-category">
               {capitaliseWords(item.category.name)}
             </Typography>
           </Typography>
@@ -49,7 +50,7 @@ export default function Admin() {
           </Stack>
         </Stack>
       ))}
-      {data?.length === 0 && <Typography sx={{ mt: 2 }}>No news yet. Use "Create News" to add some.</Typography>}
+      {data?.length === 0 && <Typography className="admin-empty">No news yet. Use "Create News" to add some.</Typography>}
     </Stack>
   );
 }
