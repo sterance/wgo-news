@@ -10,23 +10,42 @@ import { capitaliseWords } from "../utils/formatters.ts";
 import "../pages/News.css";
 
 export default function News() {
-  // The selected category lives in the URL (/news?category=3) so it can be shared.
   const [searchParams, setSearchParams] = useSearchParams();
-  const rawCategory = Number(searchParams.get("category"));
-  const selectedId = Number.isInteger(rawCategory) && rawCategory > 0 ? rawCategory : undefined;
+  const rawCategories = searchParams.getAll("category");
+  const selectedIds = rawCategories.map((val) => Number(val)).filter((num) => !isNaN(num) && num > 0);
+  const showAll = selectedIds.length === 0;
 
   const categories = useApi<Category[]>(endpoints.categories());
-  const news = useApi<NewsItem[]>(endpoints.news({ category: selectedId }));
+  const news = useApi<NewsItem[]>(endpoints.news());
 
-  const selectCategory = (id?: number) => setSearchParams(id === undefined ? {} : { category: String(id) });
+  const selectCategory = (id?: number) => {
+    if (id === undefined) {
+      setSearchParams({});
+      return;
+    }
+    if (showAll) {
+      setSearchParams({ category: String(id) });
+    } else {
+      const current = searchParams.getAll("category").map(Number);
+      const index = current.indexOf(id);
+      const updated = (index >= 0 ? current.filter((_, i) => i !== index) : [...current, id]).map(String);
+      if (updated.length === 0) {
+        setSearchParams({});
+      } else {
+        const params = new URLSearchParams();
+        updated.forEach((catId) => params.append("category", catId));
+        setSearchParams(params);
+      }
+    }
+  };
 
   const groups = (categories.data ?? [])
-    .filter((category) => (selectedId === undefined ? true : category.id === selectedId))
+    .filter((category) => (showAll ? true : selectedIds.includes(category.id)))
     .map((category) => ({
       category,
       items: (news.data ?? []).filter((item) => item.category.id === category.id),
     }))
-    .filter((group) => selectedId !== undefined || group.items.length > 0);
+    .filter((group) => (showAll ? group.items.length > 0 : true));
 
   return (
     <Stack className="base-stack">
@@ -34,17 +53,17 @@ export default function News() {
         Categories
       </Typography>
 
-      <Stack direction="row" useFlexGap spacing={1.5} className="category-chips" sx={{ marginTop: "1rem !important", flexWrap: "wrap" }}>
-        <CategoryChip label="All" selected={selectedId === undefined} onClick={() => selectCategory()} />
+      <Stack direction="row" useFlexGap spacing={1.5} className="category-chips" sx={{ marginTop: "1rem !important", flexWrap: "wrap", justifyContent: "center" }}>
+        <CategoryChip label="All" selected={showAll} onClick={() => selectCategory()} />
         {categories.data?.map((category) => (
-          <CategoryChip key={category.id} label={category.name.replace(/\b\w/g, (char) => char.toUpperCase())} selected={category.id === selectedId} onClick={() => selectCategory(category.id)} />
+          <CategoryChip key={category.id} label={capitaliseWords(category.name)} selected={selectedIds.includes(category.id)} onClick={() => selectCategory(category.id)} />
         ))}
       </Stack>
 
       <QueryStatus loading={categories.loading || news.loading} error={categories.error ?? news.error} />
 
       {groups.map(({ category, items }) => (
-        <Stack key={category.id}>
+        <Stack key={category.id} sx={{ gap: "1rem" }}>
           <Typography variant="h5" component="h3">
             {capitaliseWords(category?.name)}
           </Typography>

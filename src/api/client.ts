@@ -35,9 +35,8 @@ export async function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> 
 export const endpoints = {
   categories: () => "/categories/",
 
-  news: (params: { category?: number; limit?: number } = {}) => {
+  news: (params: { limit?: number } = {}) => {
     const query = new URLSearchParams();
-    if (params.category !== undefined) query.set("category", String(params.category));
     if (params.limit !== undefined) query.set("limit", String(params.limit));
     const qs = query.toString();
     return `/news/${qs ? `?${qs}` : ""}`;

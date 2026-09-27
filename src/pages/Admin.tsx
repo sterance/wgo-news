@@ -17,7 +17,7 @@ export default function Admin() {
         Admin
       </Typography>
 
-      <Stack direction="row" useFlexGap spacing={1.5} sx={{ mt: 2, flexWrap: "wrap" }}>
+      <Stack direction="row" useFlexGap spacing={1.5} sx={{ mt: 2, flexWrap: "wrap", justifyContent: "center" }}>
         <Button variant="contained" href={newsAdmin("add/")} target="_blank" rel="noopener">
           Create News
         </Button>
@@ -28,10 +28,6 @@ export default function Admin() {
           Open Django admin
         </Button>
       </Stack>
-
-      <Typography variant="body2" sx={{ mt: 1, color: "var(--text-muted)" }}>
-        Editing opens Django's admin site and needs a staff login. Changes appear here after a refresh.
-      </Typography>
 
       <QueryStatus loading={loading} error={error} />
 

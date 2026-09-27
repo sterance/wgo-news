@@ -20,10 +20,10 @@
   --text: #1b1d24;
   --text-muted: #5b6070;
   --border: #e3e4e8;
-  --accent: #2b59d6;
+  --accent: #2b3fd6;
   --accent-contrast: #ffffff;
   --hover: rgba(27, 29, 36, 0.06);
-  --focus-ring: #2b59d6;
+  --focus-ring: #2b3fd6;
 }
 
 :root[data-theme="dark"] {

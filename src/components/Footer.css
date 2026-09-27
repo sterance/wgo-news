@@ -1,0 +1,31 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-block: 0.75rem;
+  padding-inline: 1.25rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.footer span {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.footer a {
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+
+.footer a:hover {
+  color: var(--text);
+}
+
+.footer svg {
+  font-size: 1.25rem;
+}

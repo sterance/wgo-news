@@ -11,12 +11,14 @@ export default function Home() {
   const { data, loading, error } = useApi<NewsItem[]>(endpoints.news({ limit: RECENT_COUNT }));
 
   return (
-    <Stack className="base-stack">
+    <Stack className="base-stack" sx={{ gap: "1rem" }}>
       <Typography variant="h2" align="center">
         Recent News
       </Typography>
       <QueryStatus loading={loading} error={error} />
-      {data?.map((item) => <NewsItemPreview key={item.id} item={item} />)}
+      {data?.map((item) => (
+        <NewsItemPreview key={item.id} item={item} />
+      ))}
       {data?.length === 0 && <Typography sx={{ mt: 2 }}>No news has been published yet.</Typography>}
     </Stack>
   );

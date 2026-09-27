@@ -1,6 +1,7 @@
 import { Stack, Typography, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import type { NewsItem } from "../api/types.ts";
+import dayjs from "dayjs";
 import "../components/NewsItemPreview.css";
 
 interface Props {
@@ -10,12 +11,18 @@ interface Props {
 export default function NewsItemPreview({ item }: Props) {
   const to = `/news/${item.id}`;
   return (
-    <Stack>
-      <Typography variant="h4">
-        <Link component={RouterLink} to={to}>
-          {item.title}
-        </Link>
-      </Typography>
+    <Stack className="news-preview">
+      <Stack direction="row" spacing={2} sx={{ alignItems: "baseline" }}>
+        <Typography variant="h4">
+          <Link component={RouterLink} to={to}>
+            {item.title}
+          </Link>
+        </Typography>
+        <Typography variant="caption">
+          {dayjs(item.date_and_time).format("DD MMMM YYYY")}, {dayjs(item.date_and_time).format("hh:mm a")}
+        </Typography>
+      </Stack>
+
       <div className="news-preview-body">
         <Typography variant="body1" className="truncated-body">
           {item.content}
