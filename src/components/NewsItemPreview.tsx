@@ -13,7 +13,7 @@ export default function NewsItemPreview({ item }: Props) {
   return (
     <Stack className="news-preview">
       <Stack direction="row" spacing={2} className="news-preview-header">
-        <Typography variant="h4">
+        <Typography variant="h5">
           <Link component={RouterLink} to={to}>
             {item.title}
           </Link>

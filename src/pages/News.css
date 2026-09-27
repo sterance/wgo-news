@@ -12,7 +12,7 @@
   color: var(--text);
 }
 
-.MuiTypography-h5 {
+.MuiTypography-h4 {
   margin-top: 2rem !important;
   border-bottom: 1px solid var(--border);
 }

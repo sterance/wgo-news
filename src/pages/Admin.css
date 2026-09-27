@@ -12,7 +12,7 @@
 }
 
 .admin-category {
-  margin-left: 0.25rem;
+  margin-left: 0.5rem !important;
   color: var(--text-muted);
 }
 

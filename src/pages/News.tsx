@@ -64,7 +64,7 @@ export default function News() {
 
       {groups.map(({ category, items }) => (
         <Stack key={category.id} className="news-category-stack">
-          <Typography variant="h5" component="h3">
+          <Typography variant="h4" component="h3">
             {capitaliseWords(category?.name)}
           </Typography>
           {items.map((item) => (
