@@ -1,0 +1,26 @@
+:root[data-theme="dark"] .confirmation-dialog .MuiPaper-root {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .confirmation-dialog .MuiButton-root {
+  color: #fff;
+}
+
+:root[data-theme="dark"] .confirmation-dialog .MuiAlert-root {
+  background-color: rgba(211, 47, 47, 0.16);
+  color: #ffb4ab;
+}
+
+:root[data-theme="dark"] .confirmation-dialog .MuiAlert-icon {
+  color: #ffb4ab;
+}
+
+:root[data-theme="dark"] .confirmation-dialog .MuiButton-containedError {
+  background-color: #ff6b6b;
+  color: var(--accent-contrast);
+}
+
+:root[data-theme="dark"] .confirmation-dialog .MuiButton-containedError:hover {
+  background-color: #ff8585;
+}

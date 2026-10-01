@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ApiError, apiGet } from "./client.ts";
 
 interface Result<T> {
@@ -9,6 +9,7 @@ interface Result<T> {
 
 export function useApi<T>(path: string | null) {
   const [result, setResult] = useState<Result<T> | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     if (path === null) return;
@@ -25,12 +26,16 @@ export function useApi<T>(path: string | null) {
       });
 
     return () => controller.abort();
-  }, [path]);
+  }, [path, refreshKey]);
 
   const current = result?.path === path ? result : null;
   return {
     data: current?.data,
     error: current?.error,
     loading: path !== null && current === null,
+    refetch: useCallback(() => {
+      setResult(null);
+      setRefreshKey((key) => key + 1);
+    }, []),
   };
 }

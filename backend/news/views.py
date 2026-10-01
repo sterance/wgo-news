@@ -1,6 +1,8 @@
 from django.db.models import Count
+from django.db.models.deletion import ProtectedError
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.response import Response
 
 from .models import Category, News
 from .serializers import CategorySerializer, NewsItemSerializer
@@ -22,15 +24,30 @@ def positive_int_param(request, name: str) -> int | None:
     return value
 
 
-class CategoryListView(ListAPIView):
-    """GET /api/categories/ - every category with its article count, A-Z."""
+class CategoryListView(ListCreateAPIView):
+    """GET/POST /api/categories/ - every category with its article count, A-Z."""
 
     serializer_class = CategorySerializer
     queryset = Category.objects.annotate(article_count=Count("news")).order_by("name")
 
 
-class NewsListView(ListAPIView):
-    """GET /api/news/ - articles, newest first.
+class CategoryDetailView(RetrieveUpdateDestroyAPIView):
+    """PATCH/DELETE /api/categories/<id>/ - change or remove one category."""
+
+    serializer_class = CategorySerializer
+    queryset = Category.objects.annotate(article_count=Count("news"))
+
+    def destroy(self, request, *args, **kwargs):
+        category = self.get_object()
+        try:
+            category.delete()
+        except ProtectedError:
+            return Response({"non_field_errors": ["Categories with articles cannot be deleted."]}, status=409)
+        return Response(status=204)
+
+
+class NewsListView(ListCreateAPIView):
+    """GET /api/news/ - articles, newest first; POST creates an article.
 
     Query parameters:
       category=<id>  only articles in that category
@@ -52,8 +69,8 @@ class NewsListView(ListAPIView):
         return queryset
 
 
-class NewsDetailView(RetrieveAPIView):
-    """GET /api/news/<id>/ - one full article."""
+class NewsDetailView(RetrieveUpdateDestroyAPIView):
+    """GET/PATCH/DELETE /api/news/<id>/ - one full article."""
 
     serializer_class = NewsItemSerializer
     queryset = News.objects.select_related("category")

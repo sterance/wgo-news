@@ -1,0 +1,42 @@
+.admin-actions {
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.admin-item {
+  margin-top: 0.5rem;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 8rem 8rem !important;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-header {
+  margin-top: 1rem;
+  border-bottom: 0;
+}
+
+.admin-column-label {
+  color: var(--text-muted);
+  font-weight: 600 !important;
+  justify-self: start;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.admin-category {
+  color: var(--text-muted);
+}
+
+.admin-item-actions {
+  justify-self: end;
+}
+
+.admin-empty {
+  margin-top: 0.5rem;
+}
+
+.admin-actions-label {
+  justify-self: center;
+}

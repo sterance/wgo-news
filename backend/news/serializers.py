@@ -18,11 +18,22 @@ class CategoryBriefSerializer(serializers.ModelSerializer):
 
 
 class NewsItemSerializer(serializers.ModelSerializer):
-    """The full article. Used for both the list and the detail endpoint -
-    the front end's own CSS truncates it wherever a preview is needed."""
+    """The full article, with a category ID accepted for writes."""
 
-    category = CategoryBriefSerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     class Meta:
         model = News
         fields = ("id", "title", "category", "source", "date_and_time", "content")
+
+    def validate_date_and_time(self, value):
+        from django.utils import timezone
+
+        if value > timezone.now():
+            raise serializers.ValidationError("The date and time cannot be in the future.")
+        return value
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["category"] = CategoryBriefSerializer(instance.category).data
+        return data

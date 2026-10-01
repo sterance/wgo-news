@@ -14,7 +14,7 @@ export const djangoAdminUrl = (path = "") => `${BACKEND_URL}/admin/${path}`;
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "News", href: "/news" },
-  { label: "Admin", href: djangoAdminUrl() },
+  { label: "Admin", href: "/admin" },
 ];
 
 export const API_BASE_URL = `${BACKEND_URL}/api`;

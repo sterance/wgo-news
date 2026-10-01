@@ -15,3 +15,11 @@ export interface NewsItem {
   date_and_time: dayjs.Dayjs;
   content: string;
 }
+
+export interface NewsInput {
+  title: string;
+  category: number;
+  source: string;
+  date_and_time: string;
+  content: string;
+}

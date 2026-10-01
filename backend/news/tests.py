@@ -103,9 +103,79 @@ class ApiTests(TestCase):
         data = {c["name"]: c["article_count"] for c in self.client.get(reverse("news:category-list")).json()}
         self.assertEqual(data, {"economy": 0, "nature": 1, "war": 5})
 
-    def test_api_is_read_only(self):
-        self.assertEqual(self.client.post(reverse("news:news-list"), {}).status_code, 405)
-        self.assertEqual(self.client.delete(reverse("news:news-detail", args=[self.newest.id])).status_code, 405)
+    def test_category_can_be_created_and_renamed(self):
+        create = self.client.post(
+            reverse("news:category-list"),
+            {"name": "Science"},
+            content_type="application/json",
+        )
+        self.assertEqual(create.status_code, 201)
+        category_id = create.json()["id"]
+
+        rename = self.client.patch(
+            reverse("news:category-detail", args=[category_id]),
+            {"name": "science and tech"},
+            content_type="application/json",
+        )
+        self.assertEqual(rename.status_code, 200)
+        self.assertEqual(rename.json()["name"], "science and tech")
+
+    def test_category_delete_is_protected_when_it_has_articles(self):
+        response = self.client.delete(reverse("news:category-detail", args=[self.war.id]))
+        self.assertEqual(response.status_code, 409)
+        self.assertIn("cannot be deleted", response.json()["non_field_errors"][0])
+
+    def test_empty_category_can_be_deleted(self):
+        response = self.client.delete(reverse("news:category-detail", args=[self.empty.id]))
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(Category.objects.filter(id=self.empty.id).exists())
+
+    def test_create_news_accepts_category_id_and_returns_nested_category(self):
+        response = self.client.post(
+            reverse("news:news-list"),
+            {
+                "title": "A new story",
+                "category": self.war.id,
+                "source": "BBC",
+                "date_and_time": "2026-09-30T12:00:00Z",
+                "content": "A body of news content.",
+            },
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()["category"], {"id": self.war.id, "name": "war"})
+
+    def test_update_news_supports_partial_payload(self):
+        response = self.client.patch(
+            reverse("news:news-detail", args=[self.newest.id]),
+            {"title": "Updated headline"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["title"], "Updated headline")
+
+    def test_delete_news_removes_article(self):
+        response = self.client.delete(reverse("news:news-detail", args=[self.newest.id]))
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(News.objects.filter(id=self.newest.id).exists())
+
+    def test_writes_reject_invalid_data(self):
+        response = self.client.post(
+            reverse("news:news-list"),
+            {"title": "No", "category": self.war.id, "source": "BBC", "content": "Body"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("title", response.json())
+
+    def test_future_date_is_rejected(self):
+        response = self.client.patch(
+            reverse("news:news-detail", args=[self.newest.id]),
+            {"date_and_time": "2099-01-01T12:00:00Z"},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("date_and_time", response.json())
 
     def test_cors_header_for_frontend_origin(self):
         response = self.client.get(reverse("news:news-list"), headers={"Origin": "http://localhost:5173"})

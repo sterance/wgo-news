@@ -1,0 +1,47 @@
+:root[data-theme="dark"] .dialog .MuiPaper-root {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .dialog .MuiInputLabel-root,
+:root[data-theme="dark"] .dialog .MuiFormHelperText-root {
+  color: var(--text-muted);
+}
+
+:root[data-theme="dark"] .dialog .MuiInputLabel-root.Mui-focused,
+:root[data-theme="dark"] .dialog .MuiInputLabel-root.MuiInputLabel-shrink {
+  color: var(--accent);
+}
+
+:root[data-theme="dark"] .dialog .MuiOutlinedInput-root {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .dialog .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .dialog .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--text-muted);
+}
+
+:root[data-theme="dark"] .dialog .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+}
+
+:root[data-theme="dark"] .dialog .MuiSelect-icon {
+  color: var(--text-muted);
+}
+
+:root[data-theme="dark"] .dialog .MuiButton-root {
+  color: var(--accent);
+}
+
+:root[data-theme="dark"] .dialog .submit-btn {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+:root[data-theme="dark"] .dialog .submit-btn:hover {
+  background-color: var(--accent);
+}

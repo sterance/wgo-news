@@ -1,0 +1,55 @@
+:root[data-theme="dark"] .category-manage-dialog .MuiPaper-root {
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiInputLabel-root {
+  color: var(--text-muted);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiInputLabel-root.Mui-focused {
+  color: var(--accent);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiOutlinedInput-root {
+  color: var(--text);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--text-muted);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiOutlinedInput-root.Mui-disabled {
+  color: var(--text-muted);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiButton-root,
+:root[data-theme="dark"] .category-manage-dialog .MuiIconButton-root {
+  color: var(--accent);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiButton-contained {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiButton-contained:hover {
+  background-color: var(--accent);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiAlert-root {
+  background-color: rgba(211, 47, 47, 0.16);
+  color: #ffb4ab;
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiAlert-icon {
+  color: #ffb4ab;
+}
