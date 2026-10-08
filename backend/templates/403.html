@@ -1,0 +1,22 @@
+{% extends "message.html" %}
+
+{% block title %}Superuser required · WGO News{% endblock %}
+
+{% block message %}
+  <h1>Superuser required</h1>
+  {% if user.is_authenticated %}
+    <p>You are signed in as <strong>{{ user.get_username }}</strong>, which is not a superuser account. Log out and sign in with a superuser to manage the news.</p>
+  {% else %}
+    <p>You need to sign in with a superuser account to see this page.</p>
+  {% endif %}
+  <div class="actions">
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'admin:logout' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="/" />
+        <button type="submit">Log out</button>
+      </form>
+    {% endif %}
+    <a href="/">Back to the home page</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load vite %}
+
+{% block head %}
+  {% vite_assets "index.html" %}
+{% endblock %}
+
+{% block content %}
+  <div id="root"></div>
+  {{ user_context|json_script:"django-context" }}
+{% endblock %}

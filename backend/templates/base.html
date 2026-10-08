@@ -1,0 +1,26 @@
+{% load static %}<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}WGO News{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon-light.svg' %}" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon-dark.svg' %}" media="(prefers-color-scheme: dark)" />
+
+    <!-- Theme bootstrap, shared with index.html. Blocking, so it runs before first paint -->
+    <script src="{% static 'theme-init.js' %}"></script>
+
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+      }
+    </style>
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+</html>

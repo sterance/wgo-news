@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../config.ts";
+import { API_BASE_URL, loginUrl } from "../config.ts";
 
 export class ApiError extends Error {
   status: number;
@@ -44,19 +44,47 @@ export function apiGet<T>(path: string, signal?: AbortSignal): Promise<T> {
   });
 }
 
-export function apiMutation<T>(path: string, method: "POST" | "PATCH" | "DELETE", body?: unknown): Promise<T> {
-  return apiRequest<T>(path, {
-    method,
-    headers: {
-      Accept: "application/json",
-      ...(body === undefined ? {} : { "Content-Type": "application/json" }),
-    },
-    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-  });
+/** Django's CSRF token, from the cookie set by GET /api/auth/me/. */
+function csrfToken(): string {
+  const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
+export async function apiMutation<T>(path: string, method: "POST" | "PATCH" | "DELETE", body?: unknown): Promise<T> {
+  try {
+    return await apiRequest<T>(path, {
+      method,
+      headers: {
+        Accept: "application/json",
+        "X-CSRFToken": csrfToken(),
+        ...(body === undefined ? {} : { "Content-Type": "application/json" }),
+      },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+    });
+  } catch (error) {
+    // Session expired or not a superuser: send them to the Django login.
+    if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
+      window.location.assign(loginUrl("/admin"));
+    }
+    throw error;
+  }
+}
+
+/** End the Django session, then go to the home page. */
+export async function logout(): Promise<void> {
+  try {
+    await apiRequest<void>(endpoints.authLogout(), { method: "POST", headers: { "X-CSRFToken": csrfToken() } });
+  } finally {
+    window.location.assign("/");
+  }
 }
 
 /** Endpoint paths, relative to API_BASE_URL. */
 export const endpoints = {
+  authMe: () => "/auth/me/",
+
+  authLogout: () => "/auth/logout/",
+
   categories: () => "/categories/",
 
   createCategory: () => "/categories/",

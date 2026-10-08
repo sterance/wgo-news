@@ -5,11 +5,15 @@ export interface NavLink {
   href: string;
 }
 
-// link to django backend
-const BACKEND_URL = ((import.meta.env.VITE_BACKEND_URL as string | undefined) || "http://localhost:8000").replace(/\/+$/, "");
+// Django backend. Empty means same origin: the Vite dev server proxies to
+// Django, or Django serves the built app itself. Production sets VITE_BACKEND_URL.
+const BACKEND_URL = ((import.meta.env.VITE_BACKEND_URL as string | undefined) || "").replace(/\/+$/, "");
 
 // link into Django admin site
-export const djangoAdminUrl = (path = "") => `${BACKEND_URL}/admin/${path}`;
+export const djangoAdminUrl = (path = "") => `${BACKEND_URL}/django-admin/${path}`;
+
+// Django admin login page; sends the person back to `next` afterwards
+export const loginUrl = (next: string) => `${BACKEND_URL}/django-admin/login/?next=${encodeURIComponent(next)}`;
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },

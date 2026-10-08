@@ -71,7 +71,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -122,16 +122,29 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# The React app built for Django to serve (`npm run build:django`). Only added
+# when it exists, so a checkout without it (e.g. the Docker build) still works.
+# Restart runserver after the first build so the directory is picked up.
+FRONTEND_BUILD_DIR = BASE_DIR / "frontend_build"
+STATICFILES_DIRS = [FRONTEND_BUILD_DIR] if FRONTEND_BUILD_DIR.is_dir() else []
+
+# Anything that needs a login (the React /admin page) sends people to the
+# Django admin's login page.
+LOGIN_URL = "/django-admin/login/"
+
 # --- REST framework ---------------------------------------------------------
 
 REST_FRAMEWORK = {
-    # The public API is read-only; all writes go through the Django admin.
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    # Reads are public. Writes need a superuser logged in through the Django
+    # admin; the session cookie authenticates them and CSRF protects them.
+    "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
+    "DEFAULT_PERMISSION_CLASSES": ["news.permissions.IsSuperuserOrReadOnly"],
     "DEFAULT_PAGINATION_CLASS": None,
 }
 
 # --- CORS (React front end) -------------------------------------------------
-# Only the API is exposed cross-origin. Add your deployed front-end URL, e.g.
+# Only the API is exposed cross-origin, and only for reads: no credentials are
+# allowed, so admin writes only work same-origin (Vite proxy or Django-served). Add your deployed front-end URL, e.g.
 #   DJANGO_CORS_ORIGINS=https://wgo-news.pages.dev
 
 CORS_ALLOWED_ORIGINS = env_list(

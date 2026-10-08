@@ -1,0 +1,11 @@
+{% extends "message.html" %}
+
+{% block title %}Front end not built · WGO News{% endblock %}
+
+{% block message %}
+  <h1>The React front end hasn't been built</h1>
+  <p>Django serves the app from <code>backend/frontend_build/</code>, which doesn't exist yet. From the project root, run:</p>
+  <p><code>npm run build:django</code></p>
+  <p>then restart <code>python manage.py runserver</code> and reload this page.</p>
+  <p>Or use the Vite dev server instead: <code>npm run dev</code> and open <a href="http://localhost:5173/">localhost:5173</a>.</p>
+{% endblock %}

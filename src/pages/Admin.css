@@ -40,3 +40,7 @@
 .admin-actions-label {
   justify-self: center;
 }
+
+.admin-signed-in {
+  color: var(--text-muted);
+}

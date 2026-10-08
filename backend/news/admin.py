@@ -1,11 +1,13 @@
 from django.contrib import admin
 from django.db.models import Count
 
+from .forms import CategoryForm, NewsForm
 from .models import Category, News
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    form = CategoryForm
     list_display = ("name", "article_count")
     search_fields = ("name",)
 
@@ -19,6 +21,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
+    form = NewsForm
     list_display = ("title", "category", "source", "date_and_time")
     list_filter = ("category", "date_and_time")
     list_select_related = ("category",)
