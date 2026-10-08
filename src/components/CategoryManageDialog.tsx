@@ -4,8 +4,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { ApiError } from "../api/client.ts";
-import type { Category } from "../api/types.ts";
+import { ApiError, endpoints } from "../api/client.ts";
+import type { Category, NewsItem } from "../api/types.ts";
+import { useApi } from "../api/useApi.ts";
 import ConfirmationDialog from "./ConfirmationDialog.tsx";
 import { capitaliseWords } from "../utils/formatters.ts";
 import "./CategoryManageDialog.css";
@@ -25,6 +26,7 @@ export default function CategoryManageDialog({ open, categories, onClose, onSave
   const [error, setError] = useState<ApiError>();
   const [submitting, setSubmitting] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState<Category>();
+  const pendingDeletion = useApi<NewsItem[]>(deleteCategory === undefined ? null : endpoints.news({ category: deleteCategory.id }));
 
   const startCreate = () => {
     setEditingCategory(undefined);
@@ -182,7 +184,20 @@ export default function CategoryManageDialog({ open, categories, onClose, onSave
       <ConfirmationDialog
         open={deleteCategory !== undefined}
         title="Delete category?"
-        message={`This will permanently delete "${deleteCategory?.name}" and all articles under this category.`}
+        message={
+          <>
+            <Typography>
+              This will permanently delete "{deleteCategory?.name}"{pendingDeletion.data?.length === 0 ? "." : " and the following articles:"}
+            </Typography>
+            {pendingDeletion.data !== undefined && pendingDeletion.data.length > 0 && (
+              <ul>
+                {pendingDeletion.data.map((item) => (
+                  <li key={item.id}>{item.title}</li>
+                ))}
+              </ul>
+            )}
+          </>
+        }
         confirmLabel="Delete"
         confirmingLabel="Deleting..."
         confirmColor="error"

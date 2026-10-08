@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import type { ButtonProps } from "@mui/material/Button";
 import { ApiError } from "../api/client.ts";
@@ -7,7 +7,7 @@ import "./ConfirmationDialog.css";
 interface ConfirmationDialogProps {
   open: boolean;
   title: string;
-  message: string;
+  message: ReactNode;
   confirmLabel: string;
   confirmingLabel: string;
   confirmColor?: ButtonProps["color"];

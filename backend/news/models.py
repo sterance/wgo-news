@@ -37,7 +37,7 @@ class News(models.Model):
     title = models.CharField(max_length=200, validators=[MinLengthValidator(3)])
     category = models.ForeignKey(
         Category,
-        on_delete=models.PROTECT,  # can't delete a category that still has articles
+        on_delete=models.CASCADE,  # deleting a category deletes its articles
         related_name="news",
     )
     source = models.CharField(

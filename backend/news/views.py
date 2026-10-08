@@ -1,8 +1,6 @@
 from django.db.models import Count
-from django.db.models.deletion import ProtectedError
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.response import Response
 
 from .models import Category, News
 from .serializers import CategorySerializer, NewsItemSerializer
@@ -32,18 +30,10 @@ class CategoryListView(ListCreateAPIView):
 
 
 class CategoryDetailView(RetrieveUpdateDestroyAPIView):
-    """PATCH/DELETE /api/categories/<id>/ - change or remove one category."""
+    """PATCH/DELETE /api/categories/<id>/ - change or remove one category (and its articles)."""
 
     serializer_class = CategorySerializer
     queryset = Category.objects.annotate(article_count=Count("news"))
-
-    def destroy(self, request, *args, **kwargs):
-        category = self.get_object()
-        try:
-            category.delete()
-        except ProtectedError:
-            return Response({"non_field_errors": ["Categories with articles cannot be deleted."]}, status=409)
-        return Response(status=204)
 
 
 class NewsListView(ListCreateAPIView):

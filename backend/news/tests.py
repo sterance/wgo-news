@@ -2,7 +2,6 @@ from datetime import timedelta
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.db.models.deletion import ProtectedError
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -33,11 +32,13 @@ class CategoryModelTests(TestCase):
         with self.assertRaises(ValidationError):
             Category(name="War").full_clean()
 
-    def test_cannot_delete_category_with_articles(self):
+    def test_deleting_category_deletes_its_articles(self):
         category = Category.objects.create(name="war")
+        other = Category.objects.create(name="nature")
         make_news(category)
-        with self.assertRaises(ProtectedError):
-            category.delete()
+        kept = make_news(other)
+        category.delete()
+        self.assertEqual(list(News.objects.all()), [kept])
 
 
 class NewsModelTests(TestCase):
@@ -126,10 +127,11 @@ class ApiTests(TestCase):
         self.assertEqual(rename.status_code, 200)
         self.assertEqual(rename.json()["name"], "science and tech")
 
-    def test_category_delete_is_protected_when_it_has_articles(self):
+    def test_category_delete_cascades_to_its_articles(self):
         response = self.client.delete(reverse("news:category-detail", args=[self.war.id]))
-        self.assertEqual(response.status_code, 409)
-        self.assertIn("cannot be deleted", response.json()["non_field_errors"][0])
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(Category.objects.filter(id=self.war.id).exists())
+        self.assertFalse(News.objects.filter(category_id=self.war.id).exists())
 
     def test_empty_category_can_be_deleted(self):
         response = self.client.delete(reverse("news:category-detail", args=[self.empty.id]))

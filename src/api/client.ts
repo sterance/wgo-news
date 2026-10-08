@@ -65,8 +65,9 @@ export const endpoints = {
 
   deleteCategory: (id: number | string) => `/categories/${id}/`,
 
-  news: (params: { limit?: number } = {}) => {
+  news: (params: { limit?: number; category?: number } = {}) => {
     const query = new URLSearchParams();
+    if (params.category !== undefined) query.set("category", String(params.category));
     if (params.limit !== undefined) query.set("limit", String(params.limit));
     const qs = query.toString();
     return `/news/${qs ? `?${qs}` : ""}`;
