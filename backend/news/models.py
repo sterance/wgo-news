@@ -11,6 +11,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
+        db_table = "category"
         ordering = ["name"]
         verbose_name_plural = "categories"
         constraints = [
@@ -47,6 +48,7 @@ class News(models.Model):
     content = models.TextField()
 
     class Meta:
+        db_table = "article"
         ordering = ["-date_and_time", "-id"]  # newest first
         verbose_name_plural = "news"
         indexes = [models.Index(fields=["-date_and_time"], name="news_date_time_idx")]

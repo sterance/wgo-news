@@ -85,12 +85,23 @@ TEMPLATES = [
 
 # --- Database ---------------------------------------------------------------
 
+# Two SQLite files: "default" (auth.db) holds Django's own tables (auth, admin,
+# sessions, contenttypes); "news" (news.db) holds the news app's tables.
+# DJANGO_DB_DIR overrides the directory they live in.
+DB_DIR = Path(os.environ.get("DJANGO_DB_DIR", BASE_DIR))
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("DJANGO_DB_PATH", str(BASE_DIR / "db.sqlite3")),
-    }
+        "NAME": str(DB_DIR / "auth.db"),
+    },
+    "news": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": str(DB_DIR / "news.db"),
+    },
 }
+
+DATABASE_ROUTERS = ["config.db_router.NewsRouter"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

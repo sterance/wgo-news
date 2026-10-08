@@ -31,9 +31,22 @@
   color: var(--text-muted);
 }
 
+:root[data-theme="dark"] .category-manage-dialog .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiInputLabel-root.Mui-disabled {
+  color: var(--text-muted);
+}
+
 :root[data-theme="dark"] .category-manage-dialog .MuiButton-root,
 :root[data-theme="dark"] .category-manage-dialog .MuiIconButton-root {
   color: var(--accent);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiButton-root.Mui-disabled,
+:root[data-theme="dark"] .category-manage-dialog .MuiIconButton-root.Mui-disabled {
+  color: var(--text-muted);
 }
 
 :root[data-theme="dark"] .category-manage-dialog .MuiButton-contained {
@@ -43,6 +56,11 @@
 
 :root[data-theme="dark"] .category-manage-dialog .MuiButton-contained:hover {
   background-color: var(--accent);
+}
+
+:root[data-theme="dark"] .category-manage-dialog .MuiButton-contained.Mui-disabled {
+  background-color: var(--border);
+  color: var(--text-muted);
 }
 
 :root[data-theme="dark"] .category-manage-dialog .MuiAlert-root {

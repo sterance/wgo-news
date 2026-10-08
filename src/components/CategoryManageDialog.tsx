@@ -92,7 +92,9 @@ export default function CategoryManageDialog({ open, categories, onClose, onSave
                   setName(event.target.value);
                   setError(undefined);
                 }}
-                required
+                slotProps={{
+                  input: { required: true },
+                }}
                 fullWidth
                 autoFocus
                 disabled={submitting || editingCategory !== undefined}
@@ -180,7 +182,7 @@ export default function CategoryManageDialog({ open, categories, onClose, onSave
       <ConfirmationDialog
         open={deleteCategory !== undefined}
         title="Delete category?"
-        message={`This will permanently delete "${deleteCategory?.name}".`}
+        message={`This will permanently delete "${deleteCategory?.name}" and all articles under this category.`}
         confirmLabel="Delete"
         confirmingLabel="Deleting..."
         confirmColor="error"

@@ -22,6 +22,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100, unique=True)),
             ],
             options={
+                'db_table': 'category',
                 'verbose_name_plural': 'categories',
                 'ordering': ['name'],
                 'constraints': [models.UniqueConstraint(django.db.models.functions.text.Lower('name'), name='category_name_unique_ci', violation_error_message='A category with this name already exists.')],
@@ -38,6 +39,7 @@ class Migration(migrations.Migration):
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='news', to='news.category')),
             ],
             options={
+                'db_table': 'article',
                 'verbose_name_plural': 'news',
                 'ordering': ['-date_and_time', '-id'],
                 'indexes': [models.Index(fields=['-date_and_time'], name='news_date_time_idx')],

@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 from django.db.models.deletion import ProtectedError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -21,6 +21,8 @@ def make_news(category, title="A headline", hours_ago=0, **kwargs):
 
 
 class CategoryModelTests(TestCase):
+    databases = {"default", "news"}
+
     def test_name_must_be_unique(self):
         Category.objects.create(name="war")
         with self.assertRaises(IntegrityError), transaction.atomic():
@@ -39,6 +41,8 @@ class CategoryModelTests(TestCase):
 
 
 class NewsModelTests(TestCase):
+    databases = {"default", "news"}
+
     def setUp(self):
         self.category = Category.objects.create(name="nature")
 
@@ -58,6 +62,8 @@ class NewsModelTests(TestCase):
 
 
 class ApiTests(TestCase):
+    databases = {"default", "news"}
+
     @classmethod
     def setUpTestData(cls):
         cls.war = Category.objects.create(name="war")
@@ -182,7 +188,16 @@ class ApiTests(TestCase):
         self.assertEqual(response.headers.get("Access-Control-Allow-Origin"), "http://localhost:5173")
 
 
+@override_settings(
+    STORAGES={
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+)
 class AdminTests(TestCase):
+    databases = {"default", "news"}
+
     def test_models_are_registered_and_deletion_asks_for_confirmation(self):
         from django.contrib.auth import get_user_model
 
@@ -205,7 +220,7 @@ class AdminTests(TestCase):
         url = "/admin/news/news/add/"
         form = {
             "title": "", "category": category.id, "source": "BBC",
-            "date_and_time_0": timezone.localdate().isoformat(), "date_and_time_1": "12:00:00",
+            "date_and_time_0": (timezone.localdate() - timedelta(days=1)).isoformat(), "date_and_time_1": "12:00:00",
             "content": "Some text",
         }
 
