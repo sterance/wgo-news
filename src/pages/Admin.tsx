@@ -12,13 +12,11 @@ import QueryStatus from "../components/QueryStatus.tsx";
 import { capitaliseWords } from "../utils/formatters.ts";
 import "../pages/Admin.css";
 
-/** Superusers only. Anyone else is sent to the Django admin login, which brings them back here. */
 export default function Admin() {
   const { user, loading, error } = useAuth();
   const needsLogin = user !== undefined && !user.authenticated;
 
   useEffect(() => {
-    // Full page load: the login page is Django's, not a React route.
     if (needsLogin) window.location.assign(loginUrl("/admin"));
   }, [needsLogin]);
 

@@ -9,7 +9,6 @@ MAX_LIMIT = 100
 
 
 def positive_int_param(request, name: str) -> int | None:
-    """Return a query-string parameter as a positive int, or None if absent."""
     raw = request.query_params.get(name)
     if raw in (None, ""):
         return None
@@ -47,7 +46,7 @@ class NewsListView(ListCreateAPIView):
     serializer_class = NewsItemSerializer
 
     def get_queryset(self):
-        queryset = News.objects.select_related("category")  # Meta.ordering = newest first
+        queryset = News.objects.select_related("category")
 
         category_id = positive_int_param(self.request, "category")
         if category_id is not None:

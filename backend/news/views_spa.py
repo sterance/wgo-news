@@ -1,5 +1,3 @@
-"""Serve the built React app through Django templates (`npm run build:django`)."""
-
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie

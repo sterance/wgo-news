@@ -7,7 +7,6 @@ export interface AuthUser {
   is_superuser: boolean;
 }
 
-/** The user Django rendered into the page (Django-served build only). */
 function readDjangoContext(): AuthUser | undefined {
   const text = document.getElementById("django-context")?.textContent;
   if (!text) return undefined;
@@ -18,7 +17,6 @@ function readDjangoContext(): AuthUser | undefined {
   }
 }
 
-/** Who is logged in. Starts from the Django-rendered user when there is one, then checks /api/auth/me/. */
 export function useAuth() {
   const [user, setUser] = useState<AuthUser | undefined>(readDjangoContext);
   const [error, setError] = useState<ApiError>();

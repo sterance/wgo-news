@@ -1,9 +1,3 @@
-"""``{% vite_assets "index.html" %}``: the <link>/<script> tags for a Vite build entry.
-
-Reads the manifest Vite writes with ``build.manifest`` (``npm run build:django``)
-so the hashed asset file names never need hard-coding.
-"""
-
 import json
 from functools import lru_cache
 from pathlib import Path
@@ -30,10 +24,6 @@ _read_manifest_cached = lru_cache(maxsize=None)(_read_manifest)
 
 
 def load_manifest() -> dict:
-    """The parsed manifest; raises FileNotFoundError if the app hasn't been built.
-
-    Re-read on every request while DEBUG is on, so a rebuild shows up without a restart.
-    """
     path = manifest_path()
     return _read_manifest(path) if settings.DEBUG else _read_manifest_cached(path)
 

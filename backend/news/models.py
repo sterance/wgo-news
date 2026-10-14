@@ -6,7 +6,6 @@ from django.utils import timezone
 
 
 class Category(models.Model):
-    """A news category such as "Sports", "Technology" or "World"."""
 
     name = models.CharField(max_length=100, unique=True)
 
@@ -15,8 +14,6 @@ class Category(models.Model):
         ordering = ["name"]
         verbose_name_plural = "categories"
         constraints = [
-            # `unique=True` is case-sensitive, so "War" and "war" would both be
-            # allowed. This closes that gap so there really are no duplicates.
             models.UniqueConstraint(
                 Lower("name"),
                 name="category_name_unique_ci",
@@ -32,12 +29,11 @@ class Category(models.Model):
 
 
 class News(models.Model):
-    """A single news article."""
 
     title = models.CharField(max_length=200, validators=[MinLengthValidator(3)])
     category = models.ForeignKey(
         Category,
-        on_delete=models.CASCADE,  # deleting a category deletes its articles
+        on_delete=models.CASCADE,
         related_name="news",
     )
     source = models.CharField(
@@ -49,7 +45,7 @@ class News(models.Model):
 
     class Meta:
         db_table = "article"
-        ordering = ["-date_and_time", "-id"]  # newest first
+        ordering = ["-date_and_time", "-id"]
         verbose_name_plural = "news"
         indexes = [models.Index(fields=["-date_and_time"], name="news_date_time_idx")]
 

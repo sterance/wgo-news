@@ -8,19 +8,10 @@ from .models import Category, News
 
 
 class FormValidationMixin:
-    """Run ``form_class`` over the incoming data so the API shares the admin's validation.
-
-    DRF's own field checks (required, blank, max length, exact-duplicate name)
-    run first, so ``validate()`` only sees data that passed them and those
-    messages are unchanged. The form adds the rest (future dates,
-    case-insensitive duplicate names).
-    """
 
     form_class = None
 
     def validate(self, attrs):
-        # Start from the saved instance (PATCH) or a fresh one (so model defaults
-        # such as date_and_time apply), then overlay what was sent.
         base = self.instance if self.instance is not None else self.Meta.model()
         data = model_to_dict(base, fields=self.form_class._meta.fields)
         data.update(attrs)

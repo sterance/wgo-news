@@ -6,7 +6,6 @@ interface Props {
   error?: { message: string };
 }
 
-/** Shows a spinner or an error message; renders nothing once data is ready. */
 export default function QueryStatus({ loading, error }: Props) {
   if (loading) {
     return (

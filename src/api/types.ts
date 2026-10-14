@@ -1,4 +1,3 @@
-// Shapes returned by the Django API (backend/news/serializers.py)
 import dayjs from "dayjs";
 
 export interface Category {

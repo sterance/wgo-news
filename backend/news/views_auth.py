@@ -1,5 +1,3 @@
-"""Session info for the React front end. Logging in happens on Django's admin login page."""
-
 from django.contrib.auth import logout
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import ensure_csrf_cookie

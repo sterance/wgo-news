@@ -1,11 +1,3 @@
-"""
-Django settings for the WGO News backend.
-
-Configuration that changes between machines (secret key, hosts, allowed
-front-end origins) is read from environment variables, with defaults that
-work out of the box for local development.
-"""
-
 import os
 from pathlib import Path
 
@@ -40,17 +32,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Third party
     "rest_framework",
     "corsheaders",
-    # Local
     "news",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "corsheaders.middleware.CorsMiddleware",  # must sit above CommonMiddleware
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -85,9 +75,6 @@ TEMPLATES = [
 
 # --- Database ---------------------------------------------------------------
 
-# Two SQLite files: "default" (auth.db) holds Django's own tables (auth, admin,
-# sessions, contenttypes); "news" (news.db) holds the news app's tables.
-# DJANGO_DB_DIR overrides the directory they live in.
 DB_DIR = Path(os.environ.get("DJANGO_DB_DIR", BASE_DIR))
 
 DATABASES = {
@@ -122,30 +109,20 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# The React app built for Django to serve (`npm run build:django`). Only added
-# when it exists, so a checkout without it (e.g. the Docker build) still works.
-# Restart runserver after the first build so the directory is picked up.
 FRONTEND_BUILD_DIR = BASE_DIR / "frontend_build"
 STATICFILES_DIRS = [FRONTEND_BUILD_DIR] if FRONTEND_BUILD_DIR.is_dir() else []
 
-# Anything that needs a login (the React /admin page) sends people to the
-# Django admin's login page.
 LOGIN_URL = "/django-admin/login/"
 
 # --- REST framework ---------------------------------------------------------
 
 REST_FRAMEWORK = {
-    # Reads are public. Writes need a superuser logged in through the Django
-    # admin; the session cookie authenticates them and CSRF protects them.
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework.authentication.SessionAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["news.permissions.IsSuperuserOrReadOnly"],
     "DEFAULT_PAGINATION_CLASS": None,
 }
 
 # --- CORS (React front end) -------------------------------------------------
-# Only the API is exposed cross-origin, and only for reads: no credentials are
-# allowed, so admin writes only work same-origin (Vite proxy or Django-served). Add your deployed front-end URL, e.g.
-#   DJANGO_CORS_ORIGINS=https://wgo-news.pages.dev
 
 CORS_ALLOWED_ORIGINS = env_list(
     "DJANGO_CORS_ORIGINS",

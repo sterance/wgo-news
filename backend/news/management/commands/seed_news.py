@@ -1,10 +1,3 @@
-"""Fill the database with demo categories and articles.
-
-    python manage.py seed_news
-
-Safe to run repeatedly: existing categories and articles (matched by title) are left alone.
-"""
-
 import json
 from datetime import datetime
 from pathlib import Path
